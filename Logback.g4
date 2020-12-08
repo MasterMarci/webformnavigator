@@ -5,14 +5,15 @@ options {
     language = Java;
 }
 
-logfile: line | excep;
+logfile: (line | excep) EOF;
 line: timestamp level thread clazz message;
 timestamp: FULLDATE WHITESPACE;
-level: WHITESPACE actuallevel=LVL WHITESPACE;
-thread: LEFTBRACKET (CLASSNAME | MINUS | UNDERSCORE)+ RIGHTBRACKET;
-clazz: WHITESPACE className=CLASSNAME COLON linenr=NUMBER;
+level: actuallevel=LVL WHITESPACE WHITESPACE;
+thread: LEFTBRACKET qualifier RIGHTBRACKET;
+clazz: WHITESPACE className=CLASSNAME COLON linenr=NUMBER WHITESPACE+ MINUS WHITESPACE;
 message: ((CLASSNAME | MINUS | UNDERSCORE)+ | SPECIALCHARS | WHITESPACE)+;
 excep: message;
+qualifier: (CLASSNAME | MINUS | UNDERSCORE)+;
 FULLDATE: NUMBER DOT NUMBER DOT NUMBER WHITESPACE NUMBER COLON NUMBER COLON NUMBER DOT NUMBER;
 COLON: ':';
 LVL: 'INFO' | 'WARN' | 'ERROR' | 'TRACE' | 'DEBUG' | 'ALL';
